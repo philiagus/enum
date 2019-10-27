@@ -1,0 +1,30 @@
+{
+    "name": "philiagus/parser",
+    "description": "Various implementation of sets and enums to pick and choose",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andreas Bittner",
+            "email": "philiagus@philiagus.de",
+            "role": "lead"
+        }
+    ],
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "ext-xdebug": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Philiagus\\Enum\\": "src/Philiagus/Enum"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Philiagus\\Test\\Enum\\": "tests/Philiagus/Enum"
+        }
+    }
+}
