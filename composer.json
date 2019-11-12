@@ -1,6 +1,6 @@
 {
-    "name": "philiagus/parser",
-    "description": "Various implementation of sets and enums to pick and choose",
+    "name": "philiagus/enum",
+    "description": "Various implementation of Enums to pick and choose",
     "type": "library",
     "license": "MIT",
     "authors": [
