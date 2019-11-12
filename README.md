@@ -65,4 +65,5 @@ This example creates an Enum class with the valid enum values `VALUE_ONE` and `V
 Answer: These can be hinted to and usages of them found by most IDEs.  
 
 **Can I add my own methods to the class?**
+
 Yes! With this you can add functionality or more information to your enums.

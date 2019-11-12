@@ -154,7 +154,7 @@ class CommentEnum implements \Serializable
     /**
      * @return string
      */
-    final public function __toString(): string
+    public function __toString(): string
     {
         return $this->enum;
     }
