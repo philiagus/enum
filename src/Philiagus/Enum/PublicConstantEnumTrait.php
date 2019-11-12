@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Philiagus\Enum;
 
 use Philiagus\Enum\Exception\EnumGenerationException;
-use Philiagus\Enum\Exception\InvalidEnumException;
+use Philiagus\Enum\Exception\ValueNotInEnumException;
+use Philiagus\Enum\Exception\ValuesNotInEnumException;
 
 /**
  * All public constants of the class are valid enum values
@@ -14,55 +15,82 @@ use Philiagus\Enum\Exception\InvalidEnumException;
 trait PublicConstantEnumTrait
 {
     /**
-     * @return array
+     * Returns the list of constants defined in this class
+     *
+     * @return mixed[]
      * @throws EnumGenerationException
      */
-    public static function enumAll(): array
+    final public static function enumAll(): array
     {
-        $class = static::class;
-        static $enums = [];
-        if (!isset($enums[$class])) {
-            $extracted = [];
+        static $constants = [];
+        $className = static::class;
+        if (!isset($constants[$className])) {
             try {
-                $reflection = new \ReflectionClass($class);
+                $reflection = new \ReflectionClass(static::class);
+                $constants[$className] = [];
+                foreach ($reflection->getReflectionConstants() as $reflectionConstant) {
+                    if ($reflectionConstant->isPublic()) {
+                        $constants[$className][$reflectionConstant->getName()] = $reflectionConstant->getValue();
+                    }
+                }
                 // @codeCoverageIgnoreStart
-            } catch (\Exception $e) {
-                throw new EnumGenerationException("Enum values for class $class could not be extracted", 0, $e);
+            } catch (\ReflectionException $e) {
+                throw new EnumGenerationException("Enum values for class $className could not be extracted", $className);
             }
             // @codeCoverageIgnoreEnd
-
-            foreach ($reflection->getReflectionConstants() as $constant) {
-                if (!$constant->isPublic()) continue;
-                $extracted[$constant->getName()] = $constant->getValue();
-            }
-            $enums[$class] = $extracted;
         }
 
-        return $enums[$class];
+        return $constants[$className];
     }
 
     /**
-     * Validates that the provided value is one of the values of this enum
+     * Checks if the given value is one of the values in this class and if not throws an exception
      *
-     * @param $value
+     * @param mixed $value
      *
-     * @return bool
+     * @throws ValueNotInEnumException
      * @throws EnumGenerationException
      */
-    public static function enumHas($value): bool
+    final public static function enumAssert($value)
+    {
+        if (self::enumHas($value)) return;
+
+        throw new ValueNotInEnumException(static::class, $value);
+    }
+
+    /**
+     * Checks if a given value is listed in the enums
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     *
+     * @throws EnumGenerationException
+     */
+    final public static function enumHas($value): bool
     {
         return in_array($value, self::enumAll(), true);
     }
 
     /**
-     * @param $value
+     * Checks an array of elements if all of them are valid enums of the class
      *
+     * @param array $values
+     *
+     * @throws ValuesNotInEnumException
      * @throws EnumGenerationException
      */
-    public static function enumAssert($value): void
+    final public static function enumAssertArray(array $values)
     {
-        if (self::enumHas($value)) return;
+        $notPresent = [];
+        $all = self::enumAll();
+        foreach ($values as $value) {
+            if (!in_array($value, $all, true)) {
+                $notPresent[] = $value;
+            }
+        }
+        if (empty($notPresent)) return;
 
-        throw new InvalidEnumException(static::class, $value);
+        throw new ValuesNotInEnumException(static::class, $notPresent);
     }
 }

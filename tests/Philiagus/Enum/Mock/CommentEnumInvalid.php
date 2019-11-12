@@ -9,10 +9,9 @@ use Philiagus\Enum\CommentEnum;
  * Class CommentEnum1
  *
  * @package Philiagus\test\Enum\Mock
- * @method static CommentEnum1 VALUE1
- * @method static CommentEnum1 VALUE2
+ * @method static invalid
  */
-class CommentEnum1 extends CommentEnum
+class CommentEnumInvalid extends CommentEnum
 {
 
     public function index(): int

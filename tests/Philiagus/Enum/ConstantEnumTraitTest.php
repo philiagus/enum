@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Philiagus\test\Enum;
 
 use Philiagus\Enum\Exception\EnumGenerationException;
-use Philiagus\Enum\Exception\InvalidEnumException;
+use Philiagus\Enum\Exception\ValueNotInEnumException;
+use Philiagus\Enum\Exception\ValuesNotInEnumException;
 use PHPUnit\Framework\TestCase;
 
 use Philiagus\Test\Enum\Mock\ConstantEnum1 as Enum1;
@@ -53,7 +54,7 @@ class ConstantEnumTraitTest extends TestCase
      */
     public function testInvalidAssertion(): void
     {
-        self::expectException(InvalidEnumException::class);
+        self::expectException(ValueNotInEnumException::class);
         Enum1::enumAssert('not in the list');
     }
 
@@ -65,6 +66,29 @@ class ConstantEnumTraitTest extends TestCase
         self::assertTrue(Enum1::enumHas(Enum1::VALUE1));
         self::assertTrue(Enum1::enumHas('value2'));
         self::assertFalse(Enum1::enumHas('not in the list'));
+    }
+
+    /**
+     * @throws EnumGenerationException
+     */
+    public function testValidAssertArray(): void
+    {
+        self::expectNotToPerformAssertions();
+        Enum1::enumAssertArray(['value1']);
+    }
+
+    /**
+     * @throws EnumGenerationException
+     */
+    public function testInvalidAssertArray(): void
+    {
+        $this->expectException(ValuesNotInEnumException::class);
+        try {
+            Enum1::enumAssertArray(['value1', 'not in']);
+        } catch (ValuesNotInEnumException $e) {
+            self::assertSame(['not in'], $e->getValues());
+            throw $e;
+        }
     }
 
 }

@@ -5,7 +5,8 @@ namespace Philiagus\Test\Enum\Mock;
 
 use Philiagus\Enum\PublicConstantEnumTrait;
 
-class PublicConstantEnum1 {
+class PublicConstantEnum1
+{
 
     use PublicConstantEnumTrait;
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Philiagus\Enum\Exception;
 
-class InvalidEnumException extends \OutOfBoundsException
+class ValueNotInEnumException extends \OutOfBoundsException
 {
 
     /**
