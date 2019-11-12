@@ -1,5 +1,5 @@
-# enum
-Various implementation of sets and enums to pick and choose
+# Enum
+Various implementation of Enums to pick and choose
 
 ## Philiagus\Enum\ConstantEnumTrait
 The ConstantEnumTrait treats every constant available in the class as valid Enum Values of the class.
