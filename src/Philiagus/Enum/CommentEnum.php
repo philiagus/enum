@@ -76,7 +76,7 @@ class CommentEnum implements \Serializable
     /**
      * @throws EnumGenerationException
      */
-    private static function init(): void
+    final private static function init(): void
     {
         $class = static::class;
         if (!isset(self::$validValues[$class])) {

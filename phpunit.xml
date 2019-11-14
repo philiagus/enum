@@ -23,7 +23,7 @@
     </filter>
 
     <testsuites>
-        <testsuite name="Parser Suite">
+        <testsuite name="Enum Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

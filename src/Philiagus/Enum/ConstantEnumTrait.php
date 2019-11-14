@@ -35,7 +35,7 @@ trait ConstantEnumTrait
         $className = static::class;
         if (!isset($constants[$className])) {
             try {
-                $reflection = new \ReflectionClass(static::class);
+                $reflection = new \ReflectionClass($className);
                 $constants[$className] = [];
                 foreach ($reflection->getReflectionConstants() as $reflectionConstant) {
                     $constants[$className][$reflectionConstant->getName()] = $reflectionConstant->getValue();
