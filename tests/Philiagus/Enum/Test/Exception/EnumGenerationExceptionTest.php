@@ -10,20 +10,20 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\test\Enum\Exception;
+namespace Philiagus\Enum\Test\Exception;
 
-use Philiagus\Enum\Exception\ValuesNotInEnumException;
+use Exception;
+use Philiagus\Enum\Exception\EnumGenerationException;
 use PHPUnit\Framework\TestCase;
 
-class ValuesNotInEnumExceptionTest extends TestCase
+class EnumGenerationExceptionTest extends TestCase
 {
-
     public function testClass(): void
     {
-        $exception = new ValuesNotInEnumException('class', ['value']);
+        $parent = new Exception();
+        $exception = new EnumGenerationException('msg', 'class', $parent);
         self::assertSame('class', $exception->getClass());
-        self::assertSame(['value'], $exception->getValues());
-        self::assertSame("The provided values are not valid class enums", $exception->getMessage());
+        self::assertSame('msg', $exception->getMessage());
+        self::assertSame($parent, $exception->getPrevious());
     }
-
 }

@@ -10,17 +10,13 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\Test\Enum\Mock;
+namespace Philiagus\Enum\Test\Mock;
 
-use Philiagus\Enum\ConstantEnumTrait;
-
-class ConstantEnum1
+class PublicConstantEnum2 extends PublicConstantEnum1
 {
 
-    use ConstantEnumTrait;
-
-    public const VALUE1 = 'value1';
-    private const VALUE2 = 'value2';
-    protected const VALUE3 = 'value3';
+    public const VALUE4 = 'value4';
+    protected const VALUE5 = 'value5';
+    private const VALUE6 = 'value6';
 
 }

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\Test\Enum\Mock;
+namespace Philiagus\Enum\Test\Mock;
 
 class ConstantEnum2 extends ConstantEnum1
 {

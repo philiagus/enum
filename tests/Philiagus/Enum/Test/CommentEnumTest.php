@@ -10,15 +10,15 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\Test\Enum;
+namespace Philiagus\Enum\Test;
 
 use Philiagus\Enum\CommentEnum;
 use Philiagus\Enum\Exception\EnumGenerationException;
 use Philiagus\Enum\Exception\ValueNotInEnumException;
-use Philiagus\Test\Enum\Mock\CommentEnum1;
-use Philiagus\Test\Enum\Mock\CommentEnumDuplicates;
-use Philiagus\Test\Enum\Mock\CommentEnumInvalid;
-use Philiagus\Test\Enum\Mock\CommentEnumNoComment;
+use Philiagus\Enum\Test\Mock\CommentEnum1;
+use Philiagus\Enum\Test\Mock\CommentEnumDuplicates;
+use Philiagus\Enum\Test\Mock\CommentEnumInvalid;
+use Philiagus\Enum\Test\Mock\CommentEnumNoComment;
 use PHPUnit\Framework\TestCase;
 
 class CommentEnumTest extends TestCase
@@ -91,7 +91,7 @@ class CommentEnumTest extends TestCase
     public function testDisallowOfUnserialization(): void
     {
         self::expectException(\LogicException::class);
-        unserialize('C:37:"Philiagus\Test\Enum\Mock\CommentEnum1":0:{}');
+        unserialize('C:37:"Philiagus\Enum\Test\Mock\CommentEnum1":0:{}');
     }
 
     public function testStringCastingReturnsName(): void

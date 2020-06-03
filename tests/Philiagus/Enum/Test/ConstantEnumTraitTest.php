@@ -10,15 +10,15 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\test\Enum;
+namespace Philiagus\Enum\Test;
 
 use Philiagus\Enum\Exception\EnumGenerationException;
 use Philiagus\Enum\Exception\ValueNotInEnumException;
 use Philiagus\Enum\Exception\ValuesNotInEnumException;
 use PHPUnit\Framework\TestCase;
 
-use Philiagus\Test\Enum\Mock\ConstantEnum1 as Enum1;
-use Philiagus\Test\Enum\Mock\ConstantEnum2 as Enum2;
+use Philiagus\Enum\Test\Mock\ConstantEnum1 as Enum1;
+use Philiagus\Enum\Test\Mock\ConstantEnum2 as Enum2;
 
 class ConstantEnumTraitTest extends TestCase
 {

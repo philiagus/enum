@@ -24,7 +24,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Philiagus\\Test\\Enum\\": "tests/Philiagus/Enum"
+            "Philiagus\\Enum\\Test\\": "tests/Philiagus/Enum/Test"
         }
     }
 }

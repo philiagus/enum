@@ -10,14 +10,14 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\Test\Enum\Mock;
+namespace Philiagus\Enum\Test\Mock;
 
-use Philiagus\Enum\PublicConstantEnumTrait;
+use Philiagus\Enum\ConstantEnumTrait;
 
-class PublicConstantEnum1
+class ConstantEnum1
 {
 
-    use PublicConstantEnumTrait;
+    use ConstantEnumTrait;
 
     public const VALUE1 = 'value1';
     private const VALUE2 = 'value2';

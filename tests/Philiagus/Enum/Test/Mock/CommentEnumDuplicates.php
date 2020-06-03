@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\Test\Enum\Mock;
+namespace Philiagus\Enum\Test\Mock;
 
 use Philiagus\Enum\CommentEnum;
 
@@ -18,14 +18,10 @@ use Philiagus\Enum\CommentEnum;
  * Class CommentEnum1
  *
  * @package Philiagus\test\Enum\Mock
- * @method static CommentEnum1 VALUE1
- * @method static CommentEnum1 VALUE2
+ * @method static CommentEnumDuplicates DUPLICATE
+ * @method static CommentEnumDuplicates DUPLICATE
  */
-class CommentEnum1 extends CommentEnum
+class CommentEnumDuplicates extends CommentEnum
 {
 
-    public function index(): int
-    {
-        return parent::getIndex();
-    }
 }
