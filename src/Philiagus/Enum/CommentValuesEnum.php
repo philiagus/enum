@@ -15,32 +15,34 @@ namespace Philiagus\Enum;
 use Philiagus\Enum\Exception\EnumGenerationException;
 use Philiagus\Enum\Exception\ValueNotInEnumException;
 
-class CommentEnum implements \Serializable
+class CommentValuesEnum implements \Serializable
 {
+
     /**
      * @var self[][]
      */
     private static $instances = [];
-
+    /**
+     * @var string[][]
+     */
+    private static $exposedValues = [];
     /**
      * @var string
      */
     private $name;
+    /**
+     * @var array
+     */
+    private $values;
 
     /**
      * @param string $enum
+     * @param array $values
      */
-    final private function __construct(string $enum)
+    final private function __construct(string $enum, array $values)
     {
         $this->name = $enum;
-    }
-
-    /**
-     * @return string
-     */
-    final public function getName(): string
-    {
-        return $this->name;
+        $this->values = $values;
     }
 
     /**
@@ -57,6 +59,24 @@ class CommentEnum implements \Serializable
         }
 
         return static::byName($enum);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return static
+     * @throws EnumGenerationException
+     * @throws ValueNotInEnumException
+     */
+    final public static function byName(string $name): self
+    {
+        $class = static::class;
+        static::init();
+        if (isset(self::$instances[$class][$name])) {
+            return self::$instances[$class][$name];
+        }
+
+        throw new ValueNotInEnumException(static::class, $name);
     }
 
     /**
@@ -79,15 +99,21 @@ class CommentEnum implements \Serializable
             // @codeCoverageIgnoreEnd
 
             $enums = [];
+            $exposedValues = [];
             $comment = $reflection->getDocComment();
             if (!$comment) {
                 throw new EnumGenerationException("Docblock of $class could not be read for creation of CommentEnum pattern", $class);
             }
+
+            if (preg_match_all('/@property-read(?:.*?)?\s+\$(?<prop>\w+)\s*$/im', $comment, $matches)) {
+                $exposedValues = $matches['prop'];
+            }
+
             if (preg_match_all('/@method\s+(?P<definition>.*?)\s*$/im', $comment, $matches)) {
                 $methodDefinitions = $matches['definition'];
                 $duplicates = [];
                 foreach ($methodDefinitions as $index => $definition) {
-                    if (!preg_match('/^static\s+[^\s]+\s+(?P<enum>[a-z_\x80-\xff][a-z0-9_\x80-\xff]*?)\s*$/i', $definition, $matches)) {
+                    if (!preg_match('/^static\s+[^\s]+\s+(?P<enum>[a-z_\x80-\xff][a-z0-9_\x80-\xff]*?)\s+(?P<data>.*)$/i', $definition, $matches)) {
                         throw new EnumGenerationException("Enum definition '$definition' of class '$class' does not conform to '@method static <classname> <enumname>' pattern", $class);
                     }
                     $enum = $matches['enum'];
@@ -95,14 +121,22 @@ class CommentEnum implements \Serializable
                         $duplicates[] = $enum;
                         continue;
                     }
-                    $enums[$enum] = new static($enum);
+
+                    $values = json_decode($matches['data']);
+                    if (
+                        json_last_error() !== JSON_ERROR_NONE ||
+                        !is_object($values)
+                    ) {
+                        throw new EnumGenerationException("Enum class $class contains invalid JSON data for value {$matches['enum']}", $class);
+                    }
+                    $enums[$enum] = new static($enum, (array) $values);
                 }
 
                 if (!empty($duplicates)) {
                     throw new EnumGenerationException("Enum class $class contains duplicate enum definitions for: " . implode(', ', array_unique($duplicates)), $class);
                 }
-
             }
+
             while (($reflection = $reflection->getParentClass()) && $reflection->getName() !== self::class) {
                 /** @var self $parentClass */
                 $parentClass = $reflection->getName();
@@ -121,6 +155,7 @@ class CommentEnum implements \Serializable
             }
 
             self::$instances[$class] = $enums;
+            self::$exposedValues[$class] = $exposedValues;
         }
     }
 
@@ -136,21 +171,11 @@ class CommentEnum implements \Serializable
     }
 
     /**
-     * @param string $name
-     *
-     * @return static
-     * @throws EnumGenerationException
-     * @throws ValueNotInEnumException
+     * @return string
      */
-    final public static function byName(string $name): self
+    final public function getName(): string
     {
-        $class = static::class;
-        static::init();
-        if (isset(self::$instances[$class][$name])) {
-            return self::$instances[$class][$name];
-        }
-
-        throw new ValueNotInEnumException(static::class, $name);
+        return $this->name;
     }
 
     /**
@@ -185,12 +210,42 @@ class CommentEnum implements \Serializable
         throw new \LogicException('Enums cannot be deserialized or woken up');
     }
 
-    /**
-     * @param mixed $name
-     * @param mixed $value
-     */
+    final public function __get($property)
+    {
+        $class = static::class;
+        if (!in_array($property, self::$exposedValues[$class])) {
+            throw new \LogicException(
+                "The requested property $property is not exposed or known to the enum"
+            );
+        }
+
+        return $this->getValue($property);
+    }
+
     final public function __set($name, $value)
     {
-        throw new \LogicException('A property of an enum cannot be set');
+        throw new \LogicException(
+            'A property of an enum cannot be set'
+        );
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return mixed
+     */
+    protected function getValue(string $value)
+    {
+        return $this->values[$value] ?? null;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return bool
+     */
+    protected function hasValue(string $value): bool
+    {
+        return array_key_exists($value, $this->values);
     }
 }

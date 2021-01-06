@@ -10,13 +10,12 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\Enum\Test\Mock;
+namespace Philiagus\Enum\Test\Mock\CommentValuesEnum;
 
-class ConstantEnum2 extends ConstantEnum1
+use Philiagus\Enum\CommentEnum;
+use Philiagus\Enum\CommentValuesEnum;
+
+class NoComment extends CommentValuesEnum
 {
-
-    public const VALUE4 = 'value4';
-    protected const VALUE5 = 'value5';
-    private const VALUE6 = 'value6';
 
 }

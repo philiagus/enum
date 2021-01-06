@@ -1,30 +1,21 @@
 <?php
-/**
- * This file is part of philiagus/enum
- *
- * (c) Andreas Bittner <philiagus@philiagus.de>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 declare(strict_types=1);
 
 namespace Philiagus\Enum\Test;
 
-use LogicException;
-use Philiagus\Enum\CommentEnum;
+use Philiagus\Enum\CommentValuesEnum;
 use Philiagus\Enum\Exception\EnumGenerationException;
 use Philiagus\Enum\Exception\ValueNotInEnumException;
-use Philiagus\Enum\Test\Mock\CommentEnum\Enum1;
-use Philiagus\Enum\Test\Mock\CommentEnum\Duplicates;
-use Philiagus\Enum\Test\Mock\CommentEnum\Invalid;
-use Philiagus\Enum\Test\Mock\CommentEnum\NoComment;
-use Philiagus\Enum\Test\Mock\CommentEnum\Enum1_2;
-use Philiagus\Enum\Test\Mock\CommentEnum\Overwrite;
+use Philiagus\Enum\Test\Mock\CommentValuesEnum\Duplicates;
+use Philiagus\Enum\Test\Mock\CommentValuesEnum\Enum1;
+use Philiagus\Enum\Test\Mock\CommentValuesEnum\Enum1_2;
+use Philiagus\Enum\Test\Mock\CommentValuesEnum\InvalidComment;
+use Philiagus\Enum\Test\Mock\CommentValuesEnum\InvalidJson;
+use Philiagus\Enum\Test\Mock\CommentValuesEnum\NoComment;
+use Philiagus\Enum\Test\Mock\CommentValuesEnum\Overwrite;
 use PHPUnit\Framework\TestCase;
 
-class CommentEnumTest extends TestCase
+class CommentValuesEnumTest extends TestCase
 {
 
     /**
@@ -103,16 +94,16 @@ class CommentEnumTest extends TestCase
         self::assertSame('VALUE1', (string) Enum1::VALUE1());
     }
 
-    public function testCommentEnumIsNoValidEnumClassAll(): void
+    public function testCommentValuesEnumIsNoValidEnumClassAll(): void
     {
         $this->expectException(\LogicException::class);
-        CommentEnum::all();
+        CommentValuesEnum::all();
     }
 
-    public function testCommentEnumIsNoValidEnumClassSingleValue(): void
+    public function testCommentValuesEnumIsNoValidEnumClassSingleValue(): void
     {
         $this->expectException(\LogicException::class);
-        CommentEnum::VALUE();
+        CommentValuesEnum::VALUE();
     }
 
     public function testThatItBlocksDuplicates(): void
@@ -124,7 +115,26 @@ class CommentEnumTest extends TestCase
     public function testThatItBlocksInvalidDefinitions(): void
     {
         $this->expectException(EnumGenerationException::class);
-        Invalid::DUPLICATE();
+        InvalidComment::invalid();
+    }
+
+    public function testThatItBlocksInvalidJSON(): void
+    {
+        $this->expectException(EnumGenerationException::class);
+        InvalidJson::VALUE();
+    }
+
+    public function testPropertyAccess(): void
+    {
+        self::assertTrue(Enum1::VALUE1()->hasValue('v'));
+        self::assertFalse(Enum1::VALUE1()->hasValue('nope'));
+        self::assertSame(1, Enum1::VALUE1()->v);
+        self::assertSame(2, Enum1::VALUE2()->v);
+        self::assertSame('hidden1', Enum1::VALUE1()->getHidden());
+        self::assertSame('hidden2', Enum1::VALUE2()->getHidden());
+        self::assertSame('hidden1', Enum1_2::VALUE1()->getHidden());
+        self::assertSame('hidden2', Enum1_2::VALUE2()->getHidden());
+        self::assertNull(Enum1_2::VALUE3()->getHidden());
     }
 
     public function testThatItBlocksOverwrite(): void
@@ -133,23 +143,17 @@ class CommentEnumTest extends TestCase
         Overwrite::VALUE1();
     }
 
-    public function testExceptionOnSetOfProperty(): void
+    public function testBlockOfNotExposedProperty(): void
     {
-        $this->expectException(LogicException::class);
-        Enum1::VALUE1()->nope = 'error';
+        $value = Enum1::VALUE1();
+        $this->expectException(\LogicException::class);
+        $value->hidden;
     }
 
-    public function testExtendingEnums() {
-        self::assertSame(
-            [
-                Enum1_2::VALUE3(),
-                Enum1::VALUE1(),
-                Enum1::VALUE2(),
-            ],
-            Enum1_2::all()
-        );
-
-        self::assertSame(Enum1_2::VALUE1(), Enum1::VALUE1());
+    public function testExceptionOnSetOfProperty(): void
+    {
+        $this->expectException(\LogicException::class);
+        Enum1::VALUE1()->v = 'error';
     }
 
 }

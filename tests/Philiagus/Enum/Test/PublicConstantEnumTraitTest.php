@@ -15,10 +15,9 @@ namespace Philiagus\Enum\Test;
 use Philiagus\Enum\Exception\EnumGenerationException;
 use Philiagus\Enum\Exception\ValueNotInEnumException;
 use Philiagus\Enum\Exception\ValuesNotInEnumException;
+use Philiagus\Enum\Test\Mock\PublicConstantEnum\PublicConstantEnum1 as Enum1;
+use Philiagus\Enum\Test\Mock\PublicConstantEnum\PublicConstantEnum2 as Enum2;
 use PHPUnit\Framework\TestCase;
-
-use Philiagus\Enum\Test\Mock\PublicConstantEnum1 as Enum1;
-use Philiagus\Enum\Test\Mock\PublicConstantEnum2 as Enum2;
 
 class PublicConstantEnumTraitTest extends TestCase
 {
@@ -58,7 +57,7 @@ class PublicConstantEnumTraitTest extends TestCase
      */
     public function testInvalidAssertion(): void
     {
-        self::expectException(ValueNotInEnumException::class);
+        $this->expectException(ValueNotInEnumException::class);
         Enum1::enumAssert('not in the list');
     }
 

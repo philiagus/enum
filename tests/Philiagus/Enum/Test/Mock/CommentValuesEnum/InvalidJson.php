@@ -10,11 +10,17 @@
 
 declare(strict_types=1);
 
-namespace Philiagus\Enum\Test\Mock;
+namespace Philiagus\Enum\Test\Mock\CommentValuesEnum;
 
 use Philiagus\Enum\CommentEnum;
+use Philiagus\Enum\CommentValuesEnum;
 
-class CommentEnumNoComment extends CommentEnum
+/**
+ * Class CommentEnum1
+ *
+ * @package Philiagus\test\Enum\Mock
+ * @method static self VALUE invalid
+ */
+class InvalidJson extends CommentValuesEnum
 {
-
 }
