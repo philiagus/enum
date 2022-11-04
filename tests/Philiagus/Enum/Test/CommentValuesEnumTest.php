@@ -84,9 +84,9 @@ class CommentValuesEnumTest extends TestCase
 
     public function testDisallowOfUnserialization(): void
     {
+        $string = 'O:48:"Philiagus\\Enum\\Test\\Mock\\CommentValuesEnum\\Enum1":2:{s:38:"' . "\0" . 'Philiagus\\Enum\\CommentValuesEnum' . "\0" . 'name";s:6:"VALUE1";s:40:"' . "\0" . 'Philiagus\\Enum\\CommentValuesEnum' . "\0" . 'values";a:2:{s:1:"v";i:1;s:6:"hidden";s:7:"hidden1";}}';
         $this->expectException(\LogicException::class);
-        $className = Enum1::class;
-        unserialize('C:' . strlen($className) . ':"' . $className . '":0:{}');
+        unserialize($string);
     }
 
     public function testStringCastingReturnsName(): void

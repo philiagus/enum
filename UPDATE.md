@@ -1,4 +1,10 @@
 # UPDATE
+#### v2.0.0 - v2.1.0
+
+**WARNING**: This update adds support for PHP8.1 and removes support for PHP<8.0
+
+**WARNING**: This will be the last update, as this package will be abandoned in favour of the PHP8.1 language level enums.
+
 ## v1.0.2 - v2.0.0
 
 ### BREAKING CHANGES

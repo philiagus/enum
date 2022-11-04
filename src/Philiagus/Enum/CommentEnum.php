@@ -15,7 +15,7 @@ namespace Philiagus\Enum;
 use Philiagus\Enum\Exception\EnumGenerationException;
 use Philiagus\Enum\Exception\ValueNotInEnumException;
 
-class CommentEnum implements \Serializable
+class CommentEnum
 {
     /**
      * @var self[][]
@@ -170,17 +170,22 @@ class CommentEnum implements \Serializable
     }
 
     /**
-     * @inheritDoc
+     * Fully prevent serialization
      */
-    final public function serialize()
+    final public function __serialize(): array
     {
         throw new \LogicException('Enums cannot be serialized or put to sleep');
     }
 
+
     /**
-     * @inheritDoc
+     * Fully prevent serialization
+     *
+     * @param array $data
+     *
+     * @return void
      */
-    final public function unserialize($serialized)
+    final public function __unserialize(array $data): void
     {
         throw new \LogicException('Enums cannot be deserialized or woken up');
     }

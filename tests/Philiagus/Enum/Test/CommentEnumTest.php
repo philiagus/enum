@@ -93,9 +93,10 @@ class CommentEnumTest extends TestCase
 
     public function testDisallowOfUnserialization(): void
     {
+        $string = 'O:42:"Philiagus\\Enum\\Test\\Mock\\CommentEnum\\Enum1":1:{s:32:"' . "\0" . 'Philiagus\\Enum\\CommentEnum' . "\0" . 'name";s:6:"VALUE1";}';
         $this->expectException(\LogicException::class);
         $className = Enum1::class;
-        unserialize('C:' . strlen($className) . ':"' . $className . '":0:{}');
+        unserialize($string);
     }
 
     public function testStringCastingReturnsName(): void
